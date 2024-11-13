@@ -73,8 +73,9 @@ function initGame(e) {
 
 function gameStat(e) {
 	if (e.key == " " && game.gameStart == false) game.gameStart = true;
-	else if (e.key == " " && game.gamePause == false) game.gamePause = true;
-	else if (e.key == " " && game.gamePause == true) {
+	else if (e.key == " " && game.gamePause == false) {
+		game.gamePause = true;
+	} else if (e.key == " " && game.gamePause == true) {
 		game.gamePause = false;
 		requestAnimationFrame(playGame);
 	}
@@ -97,6 +98,12 @@ function displayGame() {
 			game.ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
 		});
 		if (game.gamePause == false) requestAnimationFrame(playGame);
+		else {
+			game.ctx.font = "50px arial";
+			game.ctx.fillStyle = "black";
+			let taille = game.ctx.measureText("Pause ").width / 2;
+			game.ctx.fillText("Pause", game.canvasDom.width / 2 - taille, game.canvasDom.height / 2);
+		}
 	} else {
 		game.ctx.font = "50px arial";
 		game.ctx.fillStyle = "black";
@@ -301,6 +308,8 @@ function restartGame(e) {
 		game.gameOver = false;
 		game.gamePause = false;
 
+		document.removeEventListener("keydown", restartGame);
+		document.addEventListener("keydown", gameStat);
 		initPositions();
 	}
 }
